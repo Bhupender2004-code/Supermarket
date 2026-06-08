@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshCart Supermarket</title>
+    <style>
+        /* --- Global Styles --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- Page 1: Login Styles --- */
+        #login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #2e7d32;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #388e3c;
+        }
+
+        .switch-form {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .switch-form a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* --- Page 2: Store Styles --- */
+        header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 15px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Top Menu Navigation */
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+        }
+
+        .nav-menu button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-menu button:hover, .nav-menu button.active {
+            background-color: white;
+            color: #2e7d32;
+        }
+
+        .logout-btn {
+            background-color: #d32f2f;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Products Grid */
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .main-container h2 {
+            margin-bottom: 20px;
+            border-bottom: 2px solid #2e7d32;
+            padding-bottom: 10px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            height: 150px;
+            background-color: #eaeded;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .product-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .product-cat {
+            font-size: 12px;
+            color: #777;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 16px;
+            color: #2e7d32;
+            font-weight: bold;
+            margin-top: auto;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-page">
+        <div class="login-container">
+            <div id="auth-form-wrapper">
+                <h2 id="form-title">Login to FreshCart</h2>
+                <form id="auth-form" onsubmit="handleAuth(event)">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required placeholder="Enter your username">
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn" id="submit-btn">Login</button>
+                </form>
+                <div class="switch-form">
+                    <span id="switch-text">Don't have an account? </span>
+                    <a href="#" id="switch-link" onclick="toggleAuthMode(event)">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="store-page" class="hidden">
+        <header>
+            <div class="header-container">
+                <h1>🍏 FreshCart</h1>
+                
+                <nav>
+                    <ul class="nav-menu">
+                        <li><button class="menu-btn active" onclick="filterCategory('all', this)">All Products</button></li>
+                        <li><button class="menu-btn" onclick="filterCategory('fruits', this)">Fruits & Veggies</button></li>
+                        <li><button class="menu-btn" onclick="filterCategory('bakery', this)">Bakery</button></li>
+                        <li><button class="menu-btn" onclick="filterCategory('dairy', this)">Dairy</button></li>
+                        <li><button class="menu-btn" onclick="filterCategory('snacks', this)">Snacks</button></li>
+                    </ul>
+                </nav>
+
+                <a href="#" class="logout-btn" onclick="logout()">Logout</a>
+            </div>
+        </header>
+
+        <main class="main-container">
+            <h2 id="category-heading">All Products</h2>
+            
+            <div class="products-grid" id="products-container">
+                </div>
+        </main>
+    </div>
+
+    <script>
+        // --- State Management ---
+        let isSignUpMode = false;
+
+        // Dummy Product Data Array
+        const products = [
+            { id: 1, name: "Fresh Apples", category: "fruits", price: "$2.99", icon: "🍎" },
+            { id: 2, name: "Organic Bananas", category: "fruits", price: "$1.49", icon: "🍌" },
+            { id: 3, name: "Whole Wheat Bread", category: "bakery", price: "$3.50", icon: "🍞" },
+            { id: 4, name: "Chocolate Croissant", category: "bakery", price: "$2.25", icon: "🥐" },
+            { id: 5, name: "Fresh Milk (1L)", category: "dairy", price: "$1.99", icon: "🥛" },
+            { id: 6, name: "Cheddar Cheese", category: "dairy", price: "$4.99", icon: "🧀" },
+            { id: 7, name: "Potato Chips", category: "snacks", price: "$1.80", icon: "🥔" },
+            { id: 8, name: "Chocolate Bar", category: "snacks", price: "$1.20", icon: "🍫" },
+            { id: 9, name: "Fresh Carrots", category: "fruits", price: "$0.99", icon: "🥕" },
+            { id: 10, name: "Glazed Donuts", category: "bakery", price: "$3.00", icon: "🍩" }
+        ];
+
+        // --- Auth Page Functions ---
+        function toggleAuthMode(e) {
+            e.preventDefault();
+            isSignUpMode = !isSignUpMode;
+            
+            const formTitle = document.getElementById('form-title');
+            const submitBtn = document.getElementById('submit-btn');
+            const switchText = document.getElementById('switch-text');
+            const switchLink = document.getElementById('switch-link');
+            
+            if (isSignUpMode) {
+                formTitle.innerText = "Create An Account";
+                submitBtn.innerText = "Sign Up";
+                switchText.innerText = "Already have an account? ";
+                switchLink.innerText = "Login";
+            } else {
+                formTitle.innerText = "Login to FreshCart";
+                submitBtn.innerText = "Login";
+                switchText.innerText = "Don't have an account? ";
+                switchLink.innerText = "Sign Up";
+            }
+            document.getElementById('auth-form').reset();
+        }
+
+        function handleAuth(e) {
+            e.preventDefault(); // Prevents page from refreshing
+            
+            // In a real app, you would validate credentials here. 
+            // For this demo, we accept any inputs and log the user in.
+            
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('store-page').classList.remove('hidden');
+            
+            // Render all products initially
+            displayProducts(products);
+        }
+
+        function logout() {
+            document.getElementById('store-page').classList.add('hidden');
+            document.getElementById('login-page').classList.remove('hidden');
+            document.getElementById('auth-form').reset();
+        }
+
+        // --- Store Page Functions ---
+        function displayProducts(productsToRender) {
+            const container = document.getElementById('products-container');
+            container.innerHTML = ""; // Clear existing
+
+            if(productsToRender.length === 0) {
+                container.innerHTML = "<p>No products found in this category.</p>";
+                return;
+            }
+
+            productsToRender.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-image">${product.icon}</div>
+                    <div class="product-info">
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-cat">${product.category}</div>
+                        <div class="product-price">${product.price}</div>
+                        <button class="btn" style="padding: 6px; font-size:14px;">Add to Cart</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterCategory(category, buttonElement) {
+            // Update active state on buttons
+            const buttons = document.querySelectorAll('.menu-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+
+            // Update title
+            document.getElementById('category-heading').innerText = 
+                category === 'all' ? 'All Products' : buttonElement.innerText;
+
+            // Filter logic
+            if (category === 'all') {
+                displayProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                displayProducts(filtered);
+            }
+        }
+    </script>
+</body>
+</html>
